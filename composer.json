@@ -1,0 +1,16 @@
+{
+    "name": "ampersa/meta",
+    "description": "Handle meta tags",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.6"
+    },
+    "require-dev": {
+        
+    },
+    "autoload": {
+        "psr-4": {
+            "Ampersa\\Meta\\": "src/"
+        }
+    }
+}
