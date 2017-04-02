@@ -2,53 +2,60 @@
 
 namespace Ampersa\Meta;
 
-use Ampersa\Meta\Tag;
-use Ampersa\Meta\Types\Type;
+use Ampersa\Meta\Tags\Tag;
 
 class Meta
 {
-    const META_CHARSET      = \Ampersa\Meta\Types\Chartset::class;
-    const META_DESCRIPTION  = \Ampersa\Meta\Types\Description::class;
-    const META_GENERIC      = \Ampersa\Meta\Types\Generic::class;
-    const META_HTTPEQUIV    = \Ampersa\Meta\Types\Httpequiv::class;
-    const META_OPENGRAPH    = \Ampersa\Meta\Types\Opengraph::class;
-    const META_TITLE        = \Ampersa\Meta\Types\Title::class;
-    const META_TWITTER      = \Ampersa\Meta\Types\Twitter::class;
-    const META_VIEWPORT     = \Ampersa\Meta\Types\Viewport::class;
+    /** @var array */
+    protected $tagTypes = [
+        'charset'       => \Ampersa\Meta\Tags\Charset::class,
+        'description'   => \Ampersa\Meta\Tags\Description::class,
+        'http-equiv'    => \Ampersa\Meta\Tags\Httpequiv::class,
+        'twitter'       => \Ampersa\Meta\Tags\Twitter::class,
+        'og'            => \Ampersa\Meta\Tags\Opengraph::class,
+        'title'         => \Ampersa\Meta\Tags\Title::class,
+        'viewport'      => \Ampersa\Meta\Tags\Viewport::class,
+    ];
 
+    protected $genericTag = \Ampersa\Meta\Tags\Generic::class;
+    
     /** @var array */
     protected $meta = [];
 
     /**
-     * Construct and setup the class. Array of Types may be passed to init
+     * Construct and setup the class. Array of tags may be passed to init
      * @param array $types
      */
-    public function __construct(array $types = null)
+    public function __construct(array $tags = null)
     {
-        if (!is_null($types)) {
-            $this->add($types);
+        if (!is_null($tags)) {
+            $this->set($tags);
         }
     }
 
     /**
-     * Add a new Meta type
+     * Set a new Meta tag
      * @param Type|array  $type
+     * @param string|null $value
      */
-    public function add($type)
+    public function set($tag, $value = null)
     {
-        if (is_array($type)) {
-            foreach ($type as $entry) {
-                $this->add($entry);   
+        if (is_array($tag)) {
+            foreach ($tag as $sTag => $sValue) {
+                $this->set($sTag, $sValue);   
             }
 
             return $this;
         }
 
-        if (!$type instanceof Type and !$type instanceof Tag) {
-            throw new InvalidArgumentException('Meta must be an instance of Ampersa\Meta\Types\Type or Ampersa\Meta\Tag');
-        }
+        $class = $this->genericTag;
 
-        $this->meta[] = $type;
+        // Does this tag have a Tag class?
+        if (array_key_exists($tag, $this->tagTypes)) {
+            $class = $this->tagTypes[$tag];
+        }
+        
+        $this->meta[] = new $class(['tag' => $tag, 'content' => $value]);
 
         return $this;
     }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Ampersa\Meta\Types;
+namespace Ampersa\Meta\Tags;
 
-class Twitter implements Type
+class Opengraph implements Tag
 {
     /** @var array */
-    protected $parts = [];
+    protected $content = [];
 
-    public function __construct(array $parts)
+    public function __construct(array $content)
     {
-        $this->parts = $parts;
+        $this->content = $content;
     }
 
     /**
@@ -18,14 +18,8 @@ class Twitter implements Type
     public function tag()
     {
         $lines = [];
-        foreach ($this->parts as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $sKey => $sValue) {
-                    $lines[] = $this->buildTag($sKey, $sValue, ['twitter', $key]);
-                }
-            } else {
-                $lines[] = $this->buildTag($key, $value, 'twitter');
-            }
+        foreach ($this->content['content'] as $key => $value) {
+            $lines[] = $this->buildTag($key, $value, 'og');
         }
 
         return implode("\n", $lines);
@@ -50,6 +44,6 @@ class Twitter implements Type
             $key = sprintf('%s:%s', $namespace, $key);
         }
 
-        return sprintf('<meta name="%s" content="%s">', $key, $value);
+        return sprintf('<meta property="%s" content="%s">', $key, $value);
     }
 }
