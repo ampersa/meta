@@ -2,7 +2,7 @@
 
 namespace Ampersa\Meta\Tags;
 
-class Viewport implements Type
+class Viewport implements Tag
 {
     /** @var array */
     protected $content = [];
