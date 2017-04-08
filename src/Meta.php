@@ -8,6 +8,7 @@ class Meta
 {
     /** @var array */
     protected $tagTypes = [
+        'canonical'     => \Ampersa\Meta\Tags\Canonical::class,
         'charset'       => \Ampersa\Meta\Tags\Charset::class,
         'description'   => \Ampersa\Meta\Tags\Description::class,
         'http-equiv'    => \Ampersa\Meta\Tags\Httpequiv::class,
