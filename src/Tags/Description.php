@@ -2,15 +2,10 @@
 
 namespace Ampersa\Meta\Tags;
 
-class Description implements Tag
+class Description extends Generic
 {
-    /** @var array */
-    protected $content = [];
-
-    public function __construct(array $content)
-    {
-        $this->content = $content;
-    }
+    /** @var bool  Whether this tag must be unique in the output */
+    protected $unique = true;
 
     /**
      * @inheritdoc
