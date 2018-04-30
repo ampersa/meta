@@ -15,7 +15,7 @@ class MetaTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             new Title(['tag' => 'title', 'content' => 'This is a test title']),
             new Generic(['tag' => 'test', 'content' => 'value']),
-        ], $meta->all());
+        ], array_values($meta->all()));
     }
 
     public function testMetaOutputs()
@@ -72,5 +72,31 @@ class MetaTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->assertEquals('<meta name="twitter:card" content="summary">'."\n".'<meta name="twitter:site" content="@AmpersaUK">'."\n".'<meta name="twitter:title" content="Meta tags">', $meta->output());
+    }
+
+    public function testFaviconOutputsCorrectResult()
+    {
+        $meta = new Meta;
+        $meta->set('favicon', '/favicon.ico');
+
+        $this->assertEquals('<link rel="shortcut icon" href="/favicon.ico">', $meta->output());
+    }
+
+    public function testTagCanBeOverloaded()
+    {
+        $meta = new Meta;
+        $meta->set('favicon', '/favicon.ico');
+        $meta->set('favicon', '/overloaded.ico');
+
+        $this->assertEquals('<link rel="shortcut icon" href="/overloaded.ico">', $meta->output());
+    }
+
+    public function testTagCanBeDuplicatedWhereSet()
+    {
+        $meta = new Meta;
+        $meta->set('canonical', 'Test1');
+        $meta->set('canonical', 'Test2');
+
+        $this->assertEquals('<link rel="canonical" href="Test1">'."\n".'<link rel="canonical" href="Test2">', $meta->output());
     }
 }
