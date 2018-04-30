@@ -24,14 +24,4 @@ class MetaServiceProvider extends ServiceProvider
             return new Meta;
         });
     }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return array();
-    }
 }
